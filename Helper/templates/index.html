@@ -10,24 +10,32 @@
 
 <body>
     <h1>华生侦探助手</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>姓名</th>
-                <th>凶手</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <th>1</th>
-                <th>2</th>
-            </tr>
-        </tbody>
-    </table>
+
+    <form action="{{ url_for('restartGame')}}" method="post">
+        <button type="submit">重置</button>
+    </form>
+
+    <label>你的角色：</label>
+    <form action="{{ url_for('initMyRoles')}}" method="post">
+        <label><input type="checkbox" name="myRoles" value="0" {%  if 0 in session.myRoles %}checked {%  endif %}>塞巴斯蒂安·莫蓝</label> <br>
+        <label><input type="checkbox" name="myRoles" value="1" {%  if 1 in session.myRoles %}checked {%  endif %}>艾琳·艾德勒</label> <br>
+        <label><input type="checkbox" name="myRoles" value="2" {%  if 2 in session.myRoles %}checked {%  endif %}>雷斯垂德探长</label> <br>
+        <label><input type="checkbox" name="myRoles" value="3" {%  if 3 in session.myRoles %}checked {%  endif %}>格雷格森探长</label> <br>
+        <label><input type="checkbox" name="myRoles" value="4" {%  if 4 in session.myRoles %}checked {%  endif %}>贝恩斯探长</label> <br>
+        <label><input type="checkbox" name="myRoles" value="5" {%  if 5 in session.myRoles %}checked {%  endif %}>布莱斯萃探长</label> <br>
+        <label><input type="checkbox" name="myRoles" value="6" {%  if 6 in session.myRoles %}checked {%  endif %}>霍普金斯探长</label> <br>
+        <label><input type="checkbox" name="myRoles" value="7" {%  if 7 in session.myRoles %}checked {%  endif %}>夏洛克·福尔摩斯"</label> <br>
+        <label><input type="checkbox" name="myRoles" value="8" {%  if 8 in session.myRoles %}checked {%  endif %}>约翰·华生</label> <br>
+        <label><input type="checkbox" name="myRoles" value="9" {%  if 9 in session.myRoles %}checked {%  endif %}>麦克罗夫特·福尔摩斯</label> <br>
+        <label><input type="checkbox" name="myRoles" value="10" {%  if 10 in session.myRoles %}checked {%  endif %}>哈德逊夫人</label> <br>
+        <label><input type="checkbox" name="myRoles" value="11" {%  if 11 in session.myRoles %}checked {%  endif %}>玛丽·莫斯坦</label> <br>
+        <label><input type="checkbox" name="myRoles" value="12" {%  if 12 in session.myRoles %}checked {%  endif %}>詹姆斯·莫里亚蒂</label> <br>
+        <button type="submit">初始化</button>
+    </form>
 
     <br>
     <br>
-
+    <form action="{{ url_for('setOthersChara')}}" method="post">
     <table>
         <thead>
             <tr>
@@ -38,7 +46,7 @@
                 <th>警徽</th>
                 <th>书本</th>
                 <th>项链</th>
-                <th>眼镜</th>
+                <th>眼睛</th>
                 <th>骷髅</th>
             </tr>
         </thead>
@@ -53,17 +61,35 @@
             <tr>
                 <th>玩家A</th>
                 {% for i in range(8) %}
-                <th></th>
+                <th>
+                    <select name={{"A"+(i+1)|string}}>
+                    <option value="Null" {%  if session["A"+(i+1)|string] == "Null"  %}selected {%  endif %}> </option>
+                    {% for j in range(6) %}
+                        <option value="{{j}}" {%  if session["A"+(i+1)|string] == j|string  %}selected {%  endif %}> {{ j }}</option>
+                    {% endfor %}
+                    <option value="Exist" {%  if session["A"+(i+1)|string] == "Exist"  %}selected {%  endif %}>>0</option>
+                    </select>
+                </th>
                 {% endfor %}
             </tr>
             <tr>
                 <th>玩家B</th>
                 {% for i in range(8) %}
-                <th></th>
+                <th>
+                    <select name={{"B"+(i+1)|string}}>
+                    <option value="Null" {%  if session["B"+(i+1)|string] == "Null"  %}selected {%  endif %}> </option>
+                    {% for j in range(6) %}
+                        <option value="{{j}}" {%  if session["B"+(i+1)|string] == j|string  %}selected {%  endif %}> {{ j }}</option>
+                    {% endfor %}
+                    <option value="Exist" {%  if session["B"+(i+1)|string] == "Exist"  %}selected {%  endif %}>>0</option>
+                    </select>
+                </th>
                 {% endfor %}
             </tr>
     </tbody>
     </table>
+    <button type="submit">筛选</button>
+    </form>
 
     <br>
     <br>
@@ -79,12 +105,18 @@
                 <th>警徽</th>
                 <th>书本</th>
                 <th>项链</th>
-                <th>眼镜</th>
+                <th>眼睛</th>
                 <th>骷髅</th>
             </tr>
         </thead>
 
         <tbody>
+            <tr>
+                <th>----</th>
+                {% for i in range(8) %}
+                <th>----</th>
+                {% endfor %}
+            </tr>
         {% for gameData in gameDatas %}
 
             <tr>
@@ -103,6 +135,13 @@
                 <th>玩家B</th>
                 {% for i in range(8) %}
                 <th>{{gameData["B"+(i+1)|string]}}</th>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th>凶手</th>
+                <th>{{gameData["C"]+1}}</th>
+                {% for i in range(7) %}
+                <th>---</th>
                 {% endfor %}
             </tr>
         {% endfor %}

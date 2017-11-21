@@ -3,7 +3,7 @@ from Helper.model.s_data_prospace import s_data_prospace
 from Helper import db
 import itertools
 
-def setPlayerChara(roleList):
+def setPlayerChara(roleList=[]):
     roleChara = (
         (0, 0, 1, 0, 0, 0, 0, 1),
         (0, 1, 0, 0, 0, 1, 0, 1),
@@ -25,16 +25,27 @@ def setPlayerChara(roleList):
             results[i] += roleChara[role][i]
     return results
 
+def listStringtoInt(myStringList):
+    myIntList = []
+    for item in myStringList:
+        myIntList.append(int(item))
+    return myIntList
+
 def subList(myList,myTuple):
     result = myList[:]
     for item in myTuple:
         result.remove(item)
     return result
+def delDB(delList):
+    for delitem in delList:
+        db.session.delete(delitem)
+    db.session.commit()
+    db.session.close()
+    return
 
 def initGameData(myRoleTuple):
-    deletes = s_data_prospace.query.all()
-    for deleteitem in deletes:
-        db.session.delete(deleteitem)
+    delList = s_data_prospace.query.all()
+    delDB(delList)
     roleList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     roleList1 = subList(roleList,myRoleTuple)
     for rolesOfPlayerA in itertools.combinations(roleList1, 4):
@@ -51,6 +62,23 @@ def initGameData(myRoleTuple):
             db.session.add(newitem)
     db.session.commit()
     db.session.close()
+    return
+
+def deleteGameData(charaOfPlayerA,charaOfPlayerB):
+    for i in range(len(charaOfPlayerA)):
+        if charaOfPlayerA[i] == 'Exist':
+            delList = s_data_prospace.query.filter(getattr(s_data_prospace,"A"+str(i+1)) == 0).all()
+            delDB(delList)
+        elif charaOfPlayerA[i] <= '5'and charaOfPlayerA[1] >= '0':
+            delList = s_data_prospace.query.filter(getattr(s_data_prospace,"A"+str(i+1)) != int(charaOfPlayerA[i] )).all()
+            delDB(delList)
+    for i in range(len(charaOfPlayerB)):
+        if charaOfPlayerB[i] == 'Exist':
+            delList = s_data_prospace.query.filter(getattr(s_data_prospace,"B"+str(i+1)) == 0).all()
+            delDB(delList)
+        elif charaOfPlayerB[i] <= '5'and charaOfPlayerB[i] >= '0':
+            delList = s_data_prospace.query.filter(getattr(s_data_prospace,"B"+str(i+1)) != int(charaOfPlayerB[i] )).all()
+            delDB(delList)
     return
 
 def showMurderer():
