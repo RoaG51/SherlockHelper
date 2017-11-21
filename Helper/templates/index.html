@@ -24,5 +24,111 @@
             </tr>
         </tbody>
     </table>
+
+    <br>
+    <br>
+
+    <table>
+        <thead>
+            <tr>
+                <th>玩家姓名</th>
+                <th>烟斗</th>
+                <th>灯泡</th>
+                <th>拳头</th>
+                <th>警徽</th>
+                <th>书本</th>
+                <th>项链</th>
+                <th>眼镜</th>
+                <th>骷髅</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <th>本人</th>
+                {% for i in range(8) %}
+                <th>{{myChara[i]}}</th>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th>玩家A</th>
+                {% for i in range(8) %}
+                <th></th>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th>玩家B</th>
+                {% for i in range(8) %}
+                <th></th>
+                {% endfor %}
+            </tr>
+    </tbody>
+    </table>
+
+    <br>
+    <br>
+
+    <label>当前剩余条目：{{curNum}}</label>
+    <table>
+        <thead>
+            <tr>
+                <th>玩家姓名</th>
+                <th>烟斗</th>
+                <th>灯泡</th>
+                <th>拳头</th>
+                <th>警徽</th>
+                <th>书本</th>
+                <th>项链</th>
+                <th>眼镜</th>
+                <th>骷髅</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for gameData in gameDatas %}
+
+            <tr>
+                <th>----</th>
+                {% for i in range(8) %}
+                <th>----</th>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th>玩家A</th>
+                {% for i in range(8) %}
+                <th>{{gameData["A"+(i+1)|string]}}</th>
+                {% endfor %}
+            </tr>
+            <tr>
+                <th>玩家B</th>
+                {% for i in range(8) %}
+                <th>{{gameData["B"+(i+1)|string]}}</th>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+
+    </table>
+
+     <br>
+    <br>
+
+
+    <table>
+        <thead>
+            <tr>
+                <th>姓名</th>
+                <th>凶手几率</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for result in results %}
+            <tr>
+                <th>{{result[0]}}</th>
+                <th>{{result[1]}}</th>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
