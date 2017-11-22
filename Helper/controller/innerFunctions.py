@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from Helper.model.s_data_prospace import s_data_prospace
 from Helper import db
 import itertools
 
@@ -17,7 +16,7 @@ def setPlayerChara(roleList=[]):
         (1, 1, 0, 0, 1, 0, 0, 0),
         (1, 0, 0, 0, 0, 1, 0, 0),
         (0, 0, 0, 0, 1, 1, 0, 0),
-        (0, 0, 0, 0, 0, 1, 0, 1)
+        (0, 1, 0, 0, 0,0 , 0, 1)
     )
     results = [0,0,0,0,0,0,0,0]
     for role in roleList:
@@ -43,8 +42,8 @@ def delDB(delList):
     db.session.close()
     return
 
-def initGameData(myRoleTuple):
-    delList = s_data_prospace.query.all()
+def initGameData(myRoleTuple,sheet):
+    delList = sheet.query.all()
     delDB(delList)
     roleList = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     roleList1 = subList(roleList,myRoleTuple)
@@ -55,33 +54,36 @@ def initGameData(myRoleTuple):
             roleOfMurderer = roleList3[0]
             charaOfPlayerA = setPlayerChara(rolesOfPlayerA)
             charaOfPlayerB = setPlayerChara(rolesOfPlayerB)
-            newitem = s_data_prospace(A1=charaOfPlayerA[0],A2= charaOfPlayerA[1], A3=charaOfPlayerA[2],A4=charaOfPlayerA[3],
-                                      A5=charaOfPlayerA[4],A6= charaOfPlayerA[5], A7=charaOfPlayerA[6],A8=charaOfPlayerA[7],
-                                      B1=charaOfPlayerB[0], B2=charaOfPlayerB[1], B3=charaOfPlayerB[2],B4=charaOfPlayerB[3],
-                                      B5=charaOfPlayerB[4], B6=charaOfPlayerB[5], B7=charaOfPlayerB[6],B8=charaOfPlayerB[7], C=roleOfMurderer)
+            newitem = sheet(A1=charaOfPlayerA[0],A2= charaOfPlayerA[1], A3=charaOfPlayerA[2],A4=charaOfPlayerA[3],
+                            A5=charaOfPlayerA[4],A6= charaOfPlayerA[5], A7=charaOfPlayerA[6],A8=charaOfPlayerA[7],
+                            B1=charaOfPlayerB[0], B2=charaOfPlayerB[1], B3=charaOfPlayerB[2],B4=charaOfPlayerB[3],
+                            B5=charaOfPlayerB[4], B6=charaOfPlayerB[5], B7=charaOfPlayerB[6],B8=charaOfPlayerB[7],
+                            AR1=rolesOfPlayerA[0], AR2=rolesOfPlayerA[1], AR3=rolesOfPlayerA[2], AR4=rolesOfPlayerA[3],
+                            BR1=rolesOfPlayerB[0], BR2=rolesOfPlayerB[1], BR3=rolesOfPlayerB[2], BR4=rolesOfPlayerB[3],
+                            C=roleOfMurderer)
             db.session.add(newitem)
     db.session.commit()
     db.session.close()
     return
 
-def deleteGameData(charaOfPlayerA,charaOfPlayerB):
+def deleteGameData(charaOfPlayerA,charaOfPlayerB,sheet):
     for i in range(len(charaOfPlayerA)):
         if charaOfPlayerA[i] == 'Exist':
-            delList = s_data_prospace.query.filter(getattr(s_data_prospace,"A"+str(i+1)) == 0).all()
+            delList = sheet.query.filter(getattr(sheet,"A"+str(i+1)) == 0).all()
             delDB(delList)
         elif charaOfPlayerA[i] <= '5'and charaOfPlayerA[1] >= '0':
-            delList = s_data_prospace.query.filter(getattr(s_data_prospace,"A"+str(i+1)) != int(charaOfPlayerA[i] )).all()
+            delList = sheet.query.filter(getattr(sheet,"A"+str(i+1)) != int(charaOfPlayerA[i] )).all()
             delDB(delList)
     for i in range(len(charaOfPlayerB)):
         if charaOfPlayerB[i] == 'Exist':
-            delList = s_data_prospace.query.filter(getattr(s_data_prospace,"B"+str(i+1)) == 0).all()
+            delList = sheet.query.filter(getattr(sheet,"B"+str(i+1)) == 0).all()
             delDB(delList)
         elif charaOfPlayerB[i] <= '5'and charaOfPlayerB[i] >= '0':
-            delList = s_data_prospace.query.filter(getattr(s_data_prospace,"B"+str(i+1)) != int(charaOfPlayerB[i] )).all()
+            delList = sheet.query.filter(getattr(sheet,"B"+str(i+1)) != int(charaOfPlayerB[i] )).all()
             delDB(delList)
     return
 
-def showMurderer():
+def showMurderer(sheet):
     results = [
         [u"塞巴斯蒂安·莫蓝",0],
         [u" 艾琳·艾德勒", 0],
@@ -97,10 +99,25 @@ def showMurderer():
         [u"玛丽·莫斯坦", 0],
         [u"詹姆斯·莫里亚蒂", 0]
     ]
-    totalNum = s_data_prospace.query.count()
+    totalNum = sheet.query.count()
     if totalNum == 0:
         return results
     for i in range (13):
-        curNum = s_data_prospace.query.filter(s_data_prospace.C == i).count()
+        curNum = sheet.query.filter(sheet.C == i).count()
         results[i][1] = curNum/float(totalNum)
     return results
+
+def quickAna(sheet,roleOfPlayerM,charaOfPlayerA,charaOfPlayerB):
+    initGameData(roleOfPlayerM,sheet)
+    deleteGameData(charaOfPlayerA,charaOfPlayerB,sheet)
+    resultsList = sheet.query.all()
+    murders = showMurderer(sheet)
+    murderPro = []
+    for murder in murders:
+        if murder[1] != 0:
+            murderPro.append(murder[1])
+    if murderPro:
+        murderMax = max(murderPro)
+    else:
+        murderMax = 0
+    return [len(resultsList),len(murderPro),murderMax]

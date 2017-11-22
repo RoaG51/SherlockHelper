@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from Helper import db
 
-class s_data_prospace(db.Model):
-    __tablename__ = 's_data_prospace'
+class s_3p_minfo(db.Model):
+    __tablename__ = 's_3p_minfo'
     id = db.Column(db.Integer, primary_key=True,autoincrement=True)
     A1 = db.Column(db.Integer)
     A2 = db.Column(db.Integer)
@@ -20,10 +20,22 @@ class s_data_prospace(db.Model):
     B6 = db.Column(db.Integer)
     B7 = db.Column(db.Integer)
     B8 = db.Column(db.Integer)
+    AR1 = db.Column(db.Integer)
+    AR2 = db.Column(db.Integer)
+    AR3 = db.Column(db.Integer)
+    AR4 = db.Column(db.Integer)
+    BR1 = db.Column(db.Integer)
+    BR2 = db.Column(db.Integer)
+    BR3 = db.Column(db.Integer)
+    BR4 = db.Column(db.Integer)
+    AProNum = db.Column(db.Integer)
+    AProMax = db.Column(db.Numeric)
+    BProNum = db.Column(db.Integer)
+    BProMax = db.Column(db.Numeric)
     C = db.Column(db.Integer)
 
 
-    def __init__(self,A1=0,A2=0,A3=0,A4=0,A5=0,A6=0,A7=0,A8=0,B1=0,B2=0,B3=0,B4=0,B5=0,B6=0,B7=0,B8=0,C=0):
+    def __init__(self,A1=0,A2=0,A3=0,A4=0,A5=0,A6=0,A7=0,A8=0,B1=0,B2=0,B3=0,B4=0,B5=0,B6=0,B7=0,B8=0,AR1=0,AR2=0,AR3=0,AR4=0,BR1=0,BR2=0,BR3=0,BR4=0,AProNum=0,AProMax=0,BProNum=0,BProMax=0,C=0):
         self.A1 = A1
         self.A2 = A2
         self.A3 = A3
@@ -40,7 +52,19 @@ class s_data_prospace(db.Model):
         self.B6 = B6
         self.B7 = B7
         self.B8 = B8
+        self.AR1 = AR1
+        self.AR2 = AR2
+        self.AR3 = AR3
+        self.AR4 = AR4
+        self.BR1 = BR1
+        self.BR2 = BR2
+        self.BR3 = BR3
+        self.BR4 = BR4
+        self.AProNum = AProNum
+        self.AProMax = AProMax
+        self.BProNum = BProNum
+        self.BProMax = BProMax
         self.C = C
 
     def __repr__(self):
-        return '<s_data_prospace %r>' % self.id
+        return '<s_3p_minfo %r>' % self.id

@@ -24,7 +24,7 @@
         <label><input type="checkbox" name="myRoles" value="4" {%  if 4 in session.myRoles %}checked {%  endif %}>贝恩斯探长</label> <br>
         <label><input type="checkbox" name="myRoles" value="5" {%  if 5 in session.myRoles %}checked {%  endif %}>布莱斯萃探长</label> <br>
         <label><input type="checkbox" name="myRoles" value="6" {%  if 6 in session.myRoles %}checked {%  endif %}>霍普金斯探长</label> <br>
-        <label><input type="checkbox" name="myRoles" value="7" {%  if 7 in session.myRoles %}checked {%  endif %}>夏洛克·福尔摩斯"</label> <br>
+        <label><input type="checkbox" name="myRoles" value="7" {%  if 7 in session.myRoles %}checked {%  endif %}>夏洛克·福尔摩斯</label> <br>
         <label><input type="checkbox" name="myRoles" value="8" {%  if 8 in session.myRoles %}checked {%  endif %}>约翰·华生</label> <br>
         <label><input type="checkbox" name="myRoles" value="9" {%  if 9 in session.myRoles %}checked {%  endif %}>麦克罗夫特·福尔摩斯</label> <br>
         <label><input type="checkbox" name="myRoles" value="10" {%  if 10 in session.myRoles %}checked {%  endif %}>哈德逊夫人</label> <br>
@@ -40,14 +40,14 @@
         <thead>
             <tr>
                 <th>玩家姓名</th>
-                <th>烟斗</th>
-                <th>灯泡</th>
-                <th>拳头</th>
-                <th>警徽</th>
-                <th>书本</th>
-                <th>项链</th>
-                <th>眼睛</th>
-                <th>骷髅</th>
+                <th>烟斗(5)</th>
+                <th>灯泡(5)</th>
+                <th>拳头(5)</th>
+                <th>警徽(5)</th>
+                <th>书本(4)</th>
+                <th>项链(3)</th>
+                <th>眼睛(3)</th>
+                <th>骷髅(3)</th>
             </tr>
         </thead>
 
@@ -58,6 +58,22 @@
                 <th>{{myChara[i]}}</th>
                 {% endfor %}
             </tr>
+
+            <tr>
+                <th>本人</th>
+                {% for i in range(8) %}
+                <th>
+                    <select name={{"M"+(i+1)|string}}>
+                    <option value="Null" {%  if session["M"+(i+1)|string] == "Null"  %}selected {%  endif %}> </option>
+                    {% for j in range(6) %}
+                        <option value="{{j}}" {%  if session["M"+(i+1)|string] == j|string  %}selected {%  endif %}> {{ j }}</option>
+                    {% endfor %}
+                    <option value="Exist" {%  if session["M"+(i+1)|string] == "Exist"  %}selected {%  endif %}>>0</option>
+                    </select>
+                </th>
+                {% endfor %}
+            </tr>
+
             <tr>
                 <th>玩家A</th>
                 {% for i in range(8) %}
@@ -94,34 +110,37 @@
     <br>
     <br>
 
-    <label>当前剩余条目：{{curNum}}</label>
+    <label>当前剩余条目:{{curNum}}</label>
     <table>
         <thead>
             <tr>
                 <th>玩家姓名</th>
-                <th>烟斗</th>
-                <th>灯泡</th>
-                <th>拳头</th>
-                <th>警徽</th>
-                <th>书本</th>
-                <th>项链</th>
-                <th>眼睛</th>
-                <th>骷髅</th>
+                <th>烟斗(5)</th>
+                <th>灯泡(5)</th>
+                <th>拳头(5)</th>
+                <th>警徽(5)</th>
+                <th>书本(4)</th>
+                <th>项链(3)</th>
+                <th>眼睛(3)</th>
+                <th>骷髅(3)</th>
+                <th>剩余条目</th>
+                <th>剩余嫌疑人</th>
+                <th>最高占比</th>
             </tr>
         </thead>
 
         <tbody>
             <tr>
                 <th>----</th>
-                {% for i in range(8) %}
+                {% for i in range(11) %}
                 <th>----</th>
                 {% endfor %}
             </tr>
         {% for gameData in gameDatas %}
-
+        {% set index = loop.index0  %}
             <tr>
                 <th>----</th>
-                {% for i in range(8) %}
+                {% for i in range(11) %}
                 <th>----</th>
                 {% endfor %}
             </tr>
@@ -130,17 +149,23 @@
                 {% for i in range(8) %}
                 <th>{{gameData["A"+(i+1)|string]}}</th>
                 {% endfor %}
+                <th>{{AnaResults[index][0][0]}}</th>
+                <th>{{AnaResults[index][0][1]}}</th>
+                <th>{{AnaResults[index][0][2]}}</th>
             </tr>
             <tr>
                 <th>玩家B</th>
                 {% for i in range(8) %}
                 <th>{{gameData["B"+(i+1)|string]}}</th>
                 {% endfor %}
+                <th>{{AnaResults[index][1][0]}}</th>
+                <th>{{AnaResults[index][1][1]}}</th>
+                <th>{{AnaResults[index][1][2]}}</th>
             </tr>
             <tr>
                 <th>凶手</th>
                 <th>{{gameData["C"]+1}}</th>
-                {% for i in range(7) %}
+                {% for i in range(10) %}
                 <th>---</th>
                 {% endfor %}
             </tr>
